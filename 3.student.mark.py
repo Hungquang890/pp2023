@@ -71,8 +71,27 @@ class MarkManagementSystem:
                 print(f"{student.name}: {mark}")
             else:
                 print(f"{student.name}: -")
+    def calculate_gpa(self, student):
+        credits = []
+        marks = []
+        for course_id, mark in student.marks.items():
+            course = next((c for c in self.courses if c.id == course_id), None)
+            if course:
+                credits.append(3) 
+                marks.append(float(mark))
+        if credits and marks:
+            gpa = np.average(marks, weights=credits)
+            return round(gpa, 2)
+        else:
+            return 0.0
 
-# Example usage:
+    def list_students_by_gpa(self):
+        students_by_gpa = sorted(self.students, key=self.calculate_gpa, reverse=True)
+        print("List of students by GPA descending:")
+        for student in students_by_gpa:
+            print("Student ID:", student.id, "Name:", student.name, "GPA:", self.calculate_gpa(student))
+ 
+
 system = MarkManagementSystem()
 system.input_num_students()
 system.input_num_courses()
